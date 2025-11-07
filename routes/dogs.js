@@ -1,10 +1,10 @@
 import express from 'express';
 import {db} from '../db/db-dogs.js';
 
-const activitiesRouter = express.Router();
+const whatTheDogRouter = express.Router();
 
 // Route GET pour récupérer toutes les activités
-activitiesRouter.get("/", async (req, res)=>{
+whatTheDogRouter.get("/", async (req, res)=>{
     try {
         const name = req.query.name;
         let limit;
