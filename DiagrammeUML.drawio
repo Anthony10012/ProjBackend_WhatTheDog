@@ -1,0 +1,48 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.8 Chrome/140.0.7339.240 Electron/38.4.0 Safari/537.36" version="28.2.8">
+  <diagram name="Page-1" id="M1MbLUbSZLglBXz_RQVo">
+    <mxGraphModel dx="2559" dy="885" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-1" value="Client" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-770" y="100" width="140" height="130" as="geometry">
+            <mxRectangle x="-710" y="180" width="70" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-2" value="&lt;div&gt;- nom : string&lt;/div&gt;- prenom : string&lt;div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- genre : string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- email : string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- telephone : string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- adresse : string&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;div&gt;&lt;div&gt;&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="GnOYBK1ZbjNm4z35sSTN-1">
+          <mxGeometry y="26" width="140" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-5" value="Localité" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-220" y="90" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-6" value="- nom : string&lt;div&gt;- codepostal : int&lt;/div&gt;&lt;div&gt;- toponyme : string&lt;/div&gt;&lt;div&gt;- codecanton : string&lt;/div&gt;&lt;div&gt;- codelangue : string&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="GnOYBK1ZbjNm4z35sSTN-5">
+          <mxGeometry y="26" width="140" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-9" value="Service" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-540" y="545" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-10" value="- date : Date&lt;div&gt;- lieu : string&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- duree : int&amp;nbsp;&lt;/span&gt;&amp;nbsp;&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="GnOYBK1ZbjNm4z35sSTN-9">
+          <mxGeometry y="26" width="140" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-13" value="Chien" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-770" y="370" width="140" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-16" value="- prenom : string&lt;div&gt;- sexe : string&lt;/div&gt;&lt;div&gt;- race : Race&lt;/div&gt;&lt;div&gt;- croise : boolean&lt;/div&gt;&lt;div&gt;-&amp;nbsp;datenaissance : Date&lt;/div&gt;&lt;div&gt;- sterilise : boolean&lt;/div&gt;&lt;div&gt;- decede : boolean&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="GnOYBK1ZbjNm4z35sSTN-13">
+          <mxGeometry y="26" width="140" height="114" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-22" value="Race" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-470" y="50" width="130" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-23" value="- nom : string&lt;div&gt;- categorie : string&lt;/div&gt;&lt;div&gt;- morphotype : string&lt;/div&gt;&lt;div&gt;- classification : string&lt;/div&gt;&lt;div&gt;- tailleMinM: string&lt;/div&gt;&lt;div&gt;- tailleMaxM : string&lt;/div&gt;&lt;div&gt;- tailleMinF : string&lt;/div&gt;&lt;div&gt;- tailleMaxF : string&lt;/div&gt;&lt;div&gt;- poidsMinM : int&lt;/div&gt;&lt;div&gt;- poidsMaxM : int&lt;/div&gt;&lt;div&gt;- poidsMinF : int&lt;/div&gt;&lt;div&gt;- poidsMaxF : int&lt;/div&gt;&lt;div&gt;- esperanceVie : int&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="GnOYBK1ZbjNm4z35sSTN-22">
+          <mxGeometry y="26" width="130" height="204" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-24" value="Maladie" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-310" y="380" width="140" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="GnOYBK1ZbjNm4z35sSTN-25" value="- nom : string&lt;div&gt;- description :&amp;nbsp; string&lt;/div&gt;&lt;div&gt;- symptômes : string&lt;/div&gt;&lt;div&gt;- moyens: string&lt;/div&gt;&lt;div&gt;- remede: string&lt;/div&gt;&lt;div&gt;- vaccin : boolean&lt;/div&gt;&lt;div&gt;- zoonose : boolean&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="GnOYBK1ZbjNm4z35sSTN-24">
+          <mxGeometry y="26" width="140" height="114" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
