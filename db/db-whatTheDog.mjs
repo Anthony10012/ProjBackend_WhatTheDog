@@ -6,7 +6,7 @@ const db = {
         const con = await mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: 'root',
+            password: '',
             database: 'what_the_dog',
         });
         return con;
@@ -50,12 +50,41 @@ const db = {
         }
     },
 
+    getAllLocality:async ()=>{
+        let con;
+        try {
+            con = await db.connectToDatabase();
+            const [rows] = await con.query('SELECT * FROM locality'); // SQL correct
+            return rows;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
+
 
     getDogsById: async (id) => {
         let con;
         try {
             con = await db.connectToDatabase();
             const [rows] = await con.query('SELECT * FROM dog WHERE id = ?', [id]);
+            // Retourne le premier résultat ou undefined si le tableau est vide
+            return rows[0];
+        } catch (error) {
+            console.error(error);
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
+
+    getLocById: async (id) => {
+        let con;
+        try {
+            con = await db.connectToDatabase();
+            const [rows] = await con.query('SELECT * FROM locality WHERE idLocality = ?', [id]);
             // Retourne le premier résultat ou undefined si le tableau est vide
             return rows[0];
         } catch (error) {
