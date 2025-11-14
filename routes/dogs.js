@@ -14,15 +14,15 @@ whatTheDogRouter.get("/", async (req, res)=>{
             limit = null;
         }
 
-        let activities;
+        let dogs;
         if (name){
             if (name.length <= 2){
                 return res.status(404).json({error : "Le paramètre de recherche doit contenir au moins 3 caractères."})
             } else {
-                activities = await db.getActByName(name, limit);
+                dogs = await db.getActByName(name, limit);
             }
         } else {
-            activities = await db.getAllActs(limit);
+            dogs = await db.getAllActs(limit);
         }
         if (activities.length === 0) {
             return res.status(404).json({ message: "Aucune chien trouvé." });
