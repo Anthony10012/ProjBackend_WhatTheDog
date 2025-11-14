@@ -1,0 +1,27 @@
+{
+  "name": "projbackend_whatthedog",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Anthony10012/ProjBackend_WhatTheDog#readme",
+  "bugs": {
+    "url": "https://github.com/Anthony10012/ProjBackend_WhatTheDog/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anthony10012/ProjBackend_WhatTheDog.git"
+  },
+  "license": "ISC",
+  "author": "Anthony Simond",
+  "type": "commonjs",
+  "main": "app.mjs",
+  "scripts": {
+    "start": "nodemon app.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
