@@ -7,9 +7,9 @@ import {customerRouter} from './routes/customer.js'
 
 //express comprend ainsi les données que l'on retourne (les requêtes entrantes) sont au format json
 app.use(express.json());
-app.use('/api/customers',customerRouter);
+
 app.get('/', (req, res) => {
-    res.send('Hello CHIHUHAHAHAHAHHAHAH!')
+    res.send('Hello !')
 })
 
 app.get('/api/', (req, res) => {
@@ -17,6 +17,7 @@ app.get('/api/', (req, res) => {
 })
 
 app.use('/api/dogs', whatTheDogRouter)
+app.use('/api/customers',customerRouter);
 
 
 app.listen(port, () => {

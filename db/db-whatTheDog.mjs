@@ -50,6 +50,20 @@ const db = {
         }
     },
 
+    getAllCustomersById: async (idCustomer)=>{
+        let con;
+        try{
+            con = await db.connectToDatabase()
+            const [rows] = await con.query('SELECT * FROM customer WHERE idCustomer = ?',[idCustomer]);
+            return rows[0];
+        }catch (err){
+            console.log(err);
+            throw err
+        }finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
+
 
     getDogsById: async (id) => {
         let con;
