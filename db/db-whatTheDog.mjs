@@ -26,10 +26,10 @@ const db = {
         let con;
         try {
             con = await db.connectToDatabase();
-            const [rows] = await con.query('SELECT * FROM dogs');
+            const [rows] = await con.query('SELECT * FROM dog'); // SQL correct
             return rows;
         } catch (error) {
-            console.error(error); // Utiliser console.error
+            console.error(error);
             throw error;
         } finally {
             if (con) await db.disconnectFromDatabase(con);
@@ -40,7 +40,7 @@ const db = {
         let con;
         try {
             con = await db.connectToDatabase();
-            const [rows] = await con.query('SELECT * FROM dogs WHERE id = ?', [id]);
+            const [rows] = await con.query('SELECT * FROM dog WHERE id = ?', [id]);
             // Retourne le premier résultat ou undefined si le tableau est vide
             return rows[0];
         } catch (error) {
