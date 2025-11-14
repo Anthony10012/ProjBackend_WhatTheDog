@@ -1,19 +1,22 @@
 import express from 'express'
-const app = express();
+import whatTheDogRouter from './routes/dogs.js';
+const app = express()
 const port = process.env.PORT || 3003
 
 import {customerRouter} from './routes/customer.js'
 
 //express comprend ainsi les données que l'on retourne (les requêtes entrantes) sont au format json
 app.use(express.json());
-app.use('/customers',customerRouter);
+app.use('/api/customers',customerRouter);
 app.get('/', (req, res) => {
-    res.send('Hello !')
+    res.send('Hello CHIHUHAHAHAHAHHAHAH!')
 })
 
 app.get('/api/', (req, res) => {
     res.redirect(`http://localhost:${port}/`)
 })
+
+app.use('/api/dogs', whatTheDogRouter)
 
 
 app.listen(port, () => {
