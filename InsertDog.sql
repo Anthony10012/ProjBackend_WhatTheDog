@@ -24,7 +24,7 @@ INSERT INTO Race (name, category, morphotype, classification, sizeMin_F, sizeMax
 -- Insertion pour la table Customer
 -- -----------------------------------------------------
 INSERT INTO Customer (lastname, firstname, gender, email, tel_number, postal_address, Locality_idLocality, Service_idService) VALUES
-('Simond', 'Anthony', 'Masculin', 'anthony.simond@mail.ch', '0791234567', 'Rue de l\'Eglise 12', 1, 1), -- idCustomer 1 (Yverdon, Service 1)
+('Simond', 'Anthony', 'Masculin', 'anthony.simond@mail.ch', '0791234567', 'Rue de l Eglise 12', 1, 1), -- idCustomer 1 (Yverdon, Service 1)
 ('Achouri', 'Mouldi', 'Masculin', 'mouldi.achouri@mail.ch', '0789876543', 'Avenue de la Gare 5', 2, 2),   -- idCustomer 2 (Lausanne, Service 2)
 ('Plancherel', 'Pang', 'Masculin', 'pang.plancherel@mail.de', '0771122334', 'Bahnhofstrasse 3', 3, 3); -- idCustomer 3 (Zurich, Service 3)
 
@@ -39,7 +39,7 @@ INSERT INTO dog (firstname, sex, crossing, birthdate, dead, sterilized, Customer
 -- Insertion pour la table Illness
 -- -----------------------------------------------------
 INSERT INTO Illness (name, description, symptoms, means, remedy, vaccine, zoonosis) VALUES
-('Dysplasie de la hanche', 'Malformation de l'articulation', 'Boiterie, difficulté à se lever', 'Radiographie', 'Chirurgie ou anti-inflammatoires', 0, 0), -- idillness 1
+('Dysplasie de la hanche', 'Malformation de l articulation', 'Boiterie, difficulté à se lever', 'Radiographie', 'Chirurgie ou anti-inflammatoires', 0, 0), -- idillness 1
 ('Gale', 'Maladie de la peau causée par des acariens', 'Démangeaisons intenses, perte de poils', 'Test cutané', 'Traitements acaricides', 0, 1),       -- idillness 2
 ('Maladie de Lyme', 'Maladie bactérienne transmise par les tiques', 'Fièvre, léthargie, douleurs articulaires', 'Test sanguin', 'Antibiotiques', 1, 1);  -- idillness 3
 
@@ -52,4 +52,5 @@ INSERT INTO dog_has_Illness (dog_iddog, Illness_idillness) VALUES
 -- Tobby (iddog 2) a la Gale (idillness 2) et la Maladie de Lyme (idillness 3)
 INSERT INTO dog_has_Illness (dog_iddog, Illness_idillness) VALUES
 (2, 2),
+
 (2, 3);
