@@ -1,13 +1,13 @@
 import express  from "express";
 
-import {db} from "../db/db-whatTheDog.mjs"; //Import de la connexion a la bd
+import {dblocality} from "../db/getlocality.js"; //Import de la connexion a la bd
 
 const localityRouter = express.Router();
 
 localityRouter.get('/',async (req,res)=>{
     try{
         //Appele de  la fonction AllLocality
-        const localities = await db.getAllLocality();
+        const localities = await dblocality.getAllLocality();
         res.json(localities); // renvoie les localités en format JSON
     }catch (error){
         res.status(500).json({error:error.message})
@@ -29,7 +29,7 @@ localityRouter.get("/:id", async (req, res) =>{
             return res.status(400).json({error : "ID Invalide"});
         }
         // Vérification de l'existance de la ressource (404 Not Found)
-        const locality = await db.getLocById(id);
+        const locality = await dblocality.getLocById(id);
         if (locality === undefined){
             res.status(404).json({error : "Activité non trouvé"});
         } else {
