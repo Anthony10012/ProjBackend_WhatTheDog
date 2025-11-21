@@ -1,6 +1,6 @@
 import express  from "express";
 
-import {db} from "../db/db-whatTheDog.mjs"; //Import de la connexion a la bd
+import {dbcustomers} from "../db/getcustomers.js"; //Import de la connexion a la bd
 import {isValidID} from "../helper.mjs";
 
 //on importe la bd, la fonction isvalid de helper.mjs
@@ -13,7 +13,7 @@ customerRouter.get('/',async (req,res)=>{
     try{
         let customers
         //Appele de  la fonction getAllCustomers
-        customers = await db.getAllCustomers();
+        customers = await dbcustomers.getAllCustomers();
         res.json(customers); // Renvoye les clients en format JSON
     }catch (error){
         res.status(500).json({error:error.message})
@@ -28,7 +28,7 @@ customerRouter.get('/:id',async (req,res)=>{
         if (!isValidID(idCustomer)){
             return res.status(400).json({error:"ID invalide"});
         }
-        const customer = await db.getAllCustomersById(idCustomer);
+        const customer = await dbcustomers.getAllCustomersById(idCustomer);
         if (customer === undefined){
             res.status(404).json({error:"Customer introuvable"});
         }else{

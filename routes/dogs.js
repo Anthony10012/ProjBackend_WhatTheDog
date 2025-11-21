@@ -1,5 +1,5 @@
 import express from 'express';
-import {db} from '../db/db-whatTheDog.mjs';
+import {dbdogs} from '../db/getdogs.mjs';
 import {isValidID} from "../helper.mjs";
 
 const whatTheDogRouter = express.Router();
@@ -9,7 +9,7 @@ const whatTheDogRouter = express.Router();
 whatTheDogRouter.get("/", async (req, res)=>{
     try{
         //Appele de  la fonction GetAllDogs
-        const dogs = await db.getAllDogs();
+        const dogs = await dbdogs.getAllDogs();
         res.json(dogs);
     }catch (error){
         res.status(500).json({error:error.message})
@@ -28,7 +28,7 @@ whatTheDogRouter.get("/:id", async (req, res) =>{
         if (!isValidID(idDog)){
             return res.status(400).json({error:"ID invalide"});
         }
-        const dog = await db.getDogsById(idDog);
+        const dog = await dbdogs.getDogsById(idDog);
 
         // CORRECTION: Ajouter return pour stopper l'exécution
         if (dog === undefined){
