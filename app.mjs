@@ -10,7 +10,7 @@ import {localityRouter} from './routes/locality.js'
 app.use(express.json());
 app.use('/api/customers',customerRouter);
 app.get('/', (req, res) => {
-    res.send('Hello CHIHUHAHAHAHAHHAHAH!')
+    res.send('Hello !')
 })
 
 app.get('/api/', (req, res) => {
