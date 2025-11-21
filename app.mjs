@@ -5,6 +5,7 @@ const port = process.env.PORT || 3003
 
 import {customerRouter} from './routes/customer.js'
 import {localityRouter} from './routes/locality.js'
+import {serviceRouter} from "./routes/services.js";
 
 //express comprend ainsi les données que l'on retourne (les requêtes entrantes) sont au format json
 app.use(express.json());
@@ -19,6 +20,7 @@ app.get('/api/', (req, res) => {
 
 app.use('/api/dogs', whatTheDogRouter)
 app.use('/api/locality', localityRouter)
+app.use('/api/service', serviceRouter)
 
 
 app.listen(port, () => {
