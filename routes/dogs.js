@@ -1,5 +1,6 @@
 import express from 'express';
 import {db} from '../db/db-whatTheDog.mjs';
+import {isValidID} from "../helper.mjs";
 
 const whatTheDogRouter = express.Router();
 
@@ -21,23 +22,25 @@ whatTheDogRouter.get("/", async (req, res)=>{
 // Voici la suite des routes avec les corrections de nom et d'import
 
 // Route GET pour récupérer un seul chien par son ID
-whatTheDogRouter.get("/:id", async (req, res) =>{ // CORRECTION: activitiesRouter -> whatTheDogRouter
+whatTheDogRouter.get("/:id", async (req, res) =>{
     try {
-        const id = parseInt(req.params.id);
-        // Validation de l'ID (400 Bad Request)
-        if (!isValidId(id)){ // NOTE: isValidId doit être importé/défini
-            return res.status(400).json({error : "ID Invalide"});
+        const idDog = parseInt(req.params.id);
+        if (!isValidID(idDog)){
+            return res.status(400).json({error:"ID invalide"});
         }
-        // Vérification de l'existance de la ressource (404 Not Found)
-        // CORRECTION: Utiliser getDogsById
-        const dog = await db.getDogsById(id);
+        const dog = await db.getDogsById(idDog);
+
+        // CORRECTION: Ajouter return pour stopper l'exécution
         if (dog === undefined){
-            res.status(404).json({error : "Chien non trouvé"}); // CORRECTION: Activité -> Chien
-        } else {
-            res.json({dog}); // CORRECTION: activity -> dog
+            return res.status(404).json({error:"Dog introuvable"}); // Mieux de dire "Dog" ici
         }
-    } catch (error) {
-        res.status(500).json({error: error.message});
+
+        // S'il n'y a pas eu de 404, on envoie la réponse réussie
+        res.json({dog})
+
+    } catch (error){
+        // Le bloc catch attrape les erreurs de la BDD (getDogsById)
+        res.status(500).json({error: error.message || "Erreur serveur"});
     }
 });
 

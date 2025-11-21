@@ -45,11 +45,13 @@ const db = {
         }
     },
 
+    // fonction pour récupérer l'id de la base de donnée
     getDogsById: async (id) => {
         let con;
         try {
+            //récupère les données de la tables dog en prenant l'id
             con = await db.connectToDatabase();
-            const [rows] = await con.query('SELECT * FROM dog WHERE id = ?', [id]);
+            const [rows] = await con.query('SELECT * FROM dog WHERE iddog = ?', [id]);
             // Retourne le premier résultat ou undefined si le tableau est vide
             return rows[0];
         } catch (error) {
@@ -60,6 +62,7 @@ const db = {
         }
     },
 
+    // fonction pour récupérer tous les customers
     getAllCustomers:async ()=>{
         let con;
         try {
@@ -74,6 +77,7 @@ const db = {
         }
     },
 
+    // fonction pour récupérer l'id de la base de donnée
     getAllCustomersById: async (idCustomer)=>{
         let con;
         try{
@@ -88,6 +92,7 @@ const db = {
         }
     },
 
+    // on récupère toutes les localités
     getAllLocality:async ()=>{
         let con;
         try {
@@ -102,7 +107,7 @@ const db = {
         }
     },
 
-
+    // fonction pour récupérer l'id de la base de donnée
     getLocById: async (id) => {
         let con;
         try {
