@@ -3,8 +3,12 @@ import express  from "express";
 import {db} from "../db/db-whatTheDog.mjs"; //Import de la connexion a la bd
 import {isValidID} from "../helper.mjs";
 
+//on importe la bd, la fonction isvalid de helper.mjs
+
+// on déclare la variable customerRouter
 const customerRouter = express.Router();
 
+// fonction pour chercher tous les customers
 customerRouter.get('/',async (req,res)=>{
     try{
         let customers
@@ -17,6 +21,7 @@ customerRouter.get('/',async (req,res)=>{
 
 });
 
+// fonction pour chercher les id des customers
 customerRouter.get('/:id',async (req,res)=>{
    try {
         const idCustomer = parseInt(req.params.id);
