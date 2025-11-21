@@ -1,33 +1,57 @@
 import mysql from 'mysql2/promise';
+// on importe mysql2 afin de pouvoir faire la connexion à la database
 
+// On entre les coordonnées du compte SQL avec la base de donnée exécutée afin que le code puisse récupérer les données
+// sync => attend que la fonction soit finie pour passer a la suivante
+// async => passe a la suite meme si la fonction n est pas terminée
+// await => termine de traiter d'autres taches pendant qu il attend le resultat
 const db = {
     connectToDatabase: async () => {
         // Utilisation de mysql.createConnection est correcte pour les connexions à usage unique
         const con = await mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: '',
+            password: 'root',
             database: 'what_the_dog',
         });
         return con;
     },
 
+    // fonction pour se déconnecter de la base de donnée
     disconnectFromDatabase: async (con) => {
+        // on a mis gestion d'erreur qui dit que si le programme essaie de se déconnecter mais n'y arrive pas,
+        // il lancera un message d'erreur
         try {
             await con.end();
-            // Retirer le console.log ici est souvent préférable en production
         } catch (error) {
             console.error('Erreur lors de la déconnexion:', error);
-            // On peut choisir de ne pas 'throw' ici pour que l'opération principale ne soit pas impactée
         }
     },
 
+    // fonction pour récupérer tous les chiens de la base de donnée
     getAllDogs: async () => {
+        let con;
+        // si la base de donnée n'arrive pas à récup les données voulu, il lancera le message d'erreur
+        try {
+            con = await db.connectToDatabase();
+            const [rows] = await con.query('SELECT * FROM dog');
+            return rows;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        } finally {
+            // si la base de donnée est connecté, la déconnecte
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
+
+    getDogsById: async (id) => {
         let con;
         try {
             con = await db.connectToDatabase();
-            const [rows] = await con.query('SELECT * FROM dog'); // SQL correct
-            return rows;
+            const [rows] = await con.query('SELECT * FROM dog WHERE id = ?', [id]);
+            // Retourne le premier résultat ou undefined si le tableau est vide
+            return rows[0];
         } catch (error) {
             console.error(error);
             throw error;
@@ -65,21 +89,6 @@ const db = {
     },
 
 
-    getDogsById: async (id) => {
-        let con;
-        try {
-            con = await db.connectToDatabase();
-            const [rows] = await con.query('SELECT * FROM dog WHERE id = ?', [id]);
-            // Retourne le premier résultat ou undefined si le tableau est vide
-            return rows[0];
-        } catch (error) {
-            console.error(error);
-            throw error;
-        } finally {
-            if (con) await db.disconnectFromDatabase(con);
-        }
-    },
-
     getLocById: async (id) => {
         let con;
         try {
@@ -94,6 +103,7 @@ const db = {
             if (con) await db.disconnectFromDatabase(con);
         }
     },
+    /*
 
     createDogs: async ({nom, dateDebut, duree}) => { // CORRECTION: Utiliser 'duree' (sans accent) pour la cohérence
         let con;
@@ -180,8 +190,9 @@ const db = {
         }
     }
 
-}
 
+ */
+}
 
 
 export { db }

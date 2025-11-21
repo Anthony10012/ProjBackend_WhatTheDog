@@ -3,41 +3,15 @@ import {db} from '../db/db-whatTheDog.mjs';
 
 const whatTheDogRouter = express.Router();
 
+
 // Route GET pour récupérer tous les chiens (dogs)
 whatTheDogRouter.get("/", async (req, res)=>{
-    try {
-        const name = req.query.name;
-        let limit;
-        if (req.query.limit){
-            limit = parseInt(req.query.limit);
-        } else {
-            limit = null;
-        }
-
-        let dogs;
-        if (name){
-            if (name.length <= 2){
-                return res.status(400).json({error : "Le paramètre de recherche doit contenir au moins 3 caractères."})
-            } else {
-                // CORRECTION: Utiliser la fonction de recherche des chiens
-                // NOTE: 'db' n'a pas de 'getActByName'. J'utilise 'searchActivitiesByName' comme base.
-                dogs = await db.searchActivitiesByName(name, limit);
-            }
-        } else {
-            // CORRECTION: Utiliser la fonction pour TOUS les chiens
-            dogs = await db.getAllDogs();
-        }
-
-        // CORRECTION: Utiliser la variable 'dogs' au lieu de 'activities'
-        if (dogs.length === 0) {
-            return res.status(404).json({ message: "Aucun chien trouvé." });
-        }
-        // CORRECTION: Renvoyer 'dogs' au lieu de 'activities'
-        res.json({dogs});
-
-    } catch (error) {
-        // Le code d'erreur 404 dans un try/catch est généralement 500
-        res.status(500).json({error:error.message});
+    try{
+        //Appele de  la fonction GetAllDogs
+        const dogs = await db.getAllDogs();
+        res.json(dogs);
+    }catch (error){
+        res.status(500).json({error:error.message})
     }
 });
 
