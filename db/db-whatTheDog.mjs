@@ -83,7 +83,7 @@ const db = {
         let con;
         try {
             con = await db.connectToDatabase();
-            const [rows] = await con.query('SELECT * FROM dog WHERE id = ?', [id]);
+            const [rows] = await con.query('SELECT * FROM dog WHERE iddog = ?', [id]);
             // Retourne le premier résultat ou undefined si le tableau est vide
             return rows[0];
         } catch (error) {
