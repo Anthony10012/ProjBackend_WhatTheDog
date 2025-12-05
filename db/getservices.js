@@ -34,6 +34,22 @@ const dbservice = {
         }
     },
 
+    getAllserviceByPlace: async (place) =>{
+        let con;
+        try{
+            con = await db.connectToDatabase()
+            const searchTerm = `%${place}%`;
+
+            const [rows] = await con.query('SELECT * FROM service WHERE place LIKE ?', [searchTerm]);
+            return rows;
+        }catch (err){
+            console.log(err);
+            throw err
+        }finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
+
 }
 
 export {dbservice};

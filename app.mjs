@@ -10,6 +10,10 @@ import {serviceRouter} from "./routes/services.js";
 //express comprend ainsi les données que l'on retourne (les requêtes entrantes) sont au format json
 app.use(express.json());
 app.use('/api/customers',customerRouter);
+app.use('/api/dogs', whatTheDogRouter)
+app.use('/api/locality', localityRouter)
+app.use('/api/service', serviceRouter)
+
 app.get('/', (req, res) => {
     res.send('Hello !')
 })
@@ -17,11 +21,6 @@ app.get('/', (req, res) => {
 app.get('/api/', (req, res) => {
     res.redirect(`http://localhost:${port}/`)
 })
-
-app.use('/api/dogs', whatTheDogRouter)
-app.use('/api/locality', localityRouter)
-app.use('/api/service', serviceRouter)
-
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

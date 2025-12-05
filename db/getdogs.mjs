@@ -34,6 +34,22 @@ const dbdogs = {
         }
     },
 
+    getAllDogsByfirstname: async (firstname) =>{
+        let con;
+        try{
+            con = await db.connectToDatabase()
+
+            const searchTerm = `%${firstname}%`;
+
+            const [rows] = await con.query('SELECT * FROM dog WHERE firstname LIKE ?', [searchTerm]);
+            return rows;
+        }catch (err){
+            console.log(err);
+            throw err
+        }finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
 }
 
 export {dbdogs}

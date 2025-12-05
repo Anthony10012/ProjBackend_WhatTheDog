@@ -21,6 +21,28 @@ customerRouter.get('/',async (req,res)=>{
 
 });
 
+customerRouter.get('/lastname',async (req,res)=>{
+    try{
+        const customerLastname = req.query.lastname;
+
+        if (!customerLastname || customerLastname.trim() === ''){
+            return res.status(400).json({error:"Nom invalide"});
+        }
+
+        const customers = await dbcustomers.getAllCustomersByLastname(customerLastname.trim());
+
+        if (customers.length === 0) {
+            res.status(404).json({error:"Aucun client trouvé"});
+        } else {
+            res.status(200).json({customers})
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la recherche")
+        res.status(500).json({error:error.message})
+    }
+});
+
 // fonction pour chercher les id des customers
 customerRouter.get('/:id',async (req,res)=>{
    try {
@@ -35,8 +57,8 @@ customerRouter.get('/:id',async (req,res)=>{
             res.json({customer})
         }
 
-   } catch (error){
-       res.status(500).json({error:error});
+   } catch (error) {
+       res.status(500).json({error: error});
    }
 });
 export {customerRouter}
