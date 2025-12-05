@@ -37,9 +37,22 @@ const dbdogs = {
         try {
             //récupère les données de la tables dog en prenant l'id
             con = await db.connectToDatabase();
-            const [rows] = await con.query('SELECT * FROM dog WHERE iddog = ?', [id]);
-            // Retourne le premier résultat ou undefined si le tableau est vide
-            return rows[0];
+            const sqlQuery = `
+                SELECT 
+                    d.iddog, d.firstname, d.sex, d.birthdate, 
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Croissing, 
+                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
+                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
+                    c.firstname as custumer_firstname, c.lastname as customer_lastname,
+                    r.name as race_name 
+                FROM dog d 
+                JOIN
+                    customer c ON d.Customer_idCustomer = c.idCustomer
+                JOIN race r ON d.Race_idRace = r.idRace`;
+
+            const [rows] = await con.query(sqlQuery);
+
+            return rows;
         } catch (error) {
             console.error(error);
             throw error;
