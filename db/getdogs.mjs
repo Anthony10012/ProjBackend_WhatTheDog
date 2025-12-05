@@ -45,14 +45,15 @@ const dbdogs = {
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
                     c.firstname as custumer_firstname, c.lastname as customer_lastname,
                     r.name as race_name 
-                FROM dog d 
+                FROM dog d
                 JOIN
                     customer c ON d.Customer_idCustomer = c.idCustomer
-                JOIN race r ON d.Race_idRace = r.idRace`;
+                JOIN race r ON d.Race_idRace = r.idRace
+                WHERE d.iddog = ?`;
 
-            const [rows] = await con.query(sqlQuery);
+            const [rows] = await con.query(sqlQuery, [id]);
 
-            return rows;
+            return rows[0];
         } catch (error) {
             console.error(error);
             throw error;
@@ -67,8 +68,20 @@ const dbdogs = {
             con = await db.connectToDatabase()
 
             const searchTerm = `%${firstname}%`;
-
-            const [rows] = await con.query('SELECT * FROM dog WHERE firstname LIKE ?', [searchTerm]);
+            const sqlQuery = `
+                SELECT 
+                    d.iddog, d.firstname, d.sex, d.birthdate, 
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Croissing, 
+                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
+                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
+                    c.firstname as custumer_firstname, c.lastname as customer_lastname,
+                    r.name as race_name 
+                FROM dog d
+                JOIN
+                    customer c ON d.Customer_idCustomer = c.idCustomer
+                JOIN race r ON d.Race_idRace = r.idRace
+                WHERE d.firstname LIKE ?`
+            const [rows] = await con.query(sqlQuery, [searchTerm]);
             return rows;
         }catch (err){
             console.log(err);
