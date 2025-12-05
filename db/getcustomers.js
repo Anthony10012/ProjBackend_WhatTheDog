@@ -5,7 +5,19 @@ const dbcustomers = {
         let con;
         try {
             con = await db.connectToDatabase();
-            const [rows] = await con.query('SELECT * FROM customer'); // SQL correct
+            const sqlQuery = `
+                SELECT 
+                    c.idCustomer, c.firstname, c.lastname , c.gender, 
+                    c.email, c. tel_number, c.postal_address,
+                    l.name as Town, 
+                    s.place as Place_service, s.duration_service as Time
+                FROM customer c 
+                JOIN
+                    locality l ON c.Locality_idLocality = l.idLocality
+                JOIN service s ON c.Service_idService = s.idService`;
+
+            const [rows] = await con.query(sqlQuery);
+
             return rows;
         } catch (error) {
             console.error(error);
