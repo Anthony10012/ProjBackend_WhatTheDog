@@ -45,5 +45,39 @@ const dbcustomers = {
             if (con) await db.disconnectFromDatabase(con);
         }
     },
+
+    createCustomer: async (customer)=>{
+        let con;
+        try {
+            con= await db.connectToDatabase();
+
+            const sql = `
+                INSERT INTO Customer 
+                (lastname, firstname, gender, email, tel_number, postal_address, Locality_idLocality, Service_idService)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+
+            const values = [
+                customer.lastname,
+                customer.firstname,
+                customer.gender,
+                customer.email,
+                customer.tel_number,
+                customer.postal_address,
+                customer.Locality_idLocality,
+                customer.Service_idService
+            ]
+
+            const [result] = await con.query(sql, values);
+
+            return result.insertId;
+        } catch (error) {
+            console.error("Erreur BDD lors de la création d'un client");
+
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    }
 }
 export  {dbcustomers}
