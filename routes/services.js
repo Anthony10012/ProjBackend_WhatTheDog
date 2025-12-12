@@ -4,6 +4,8 @@ import {dbservice} from "../db/getservices.js"; //Import de la connexion a la bd
 import {isValidID} from "../helper.mjs";
 import {dblocality} from "../db/getlocality.js";
 import {localityRouter} from "./locality.js";
+import {dbdogs} from "../db/getdogs.mjs";
+import whatTheDogRouter from "./dogs.js";
 
 //on importe la bd, la fonction isvalid de helper.mjs
 
@@ -62,6 +64,36 @@ serviceRouter.get('/:id',async (req,res)=>{
 
     } catch (error){
         res.status(500).json({error:error});
+    }
+});
+
+serviceRouter.post('/',async (req,res)=>{
+    try{
+        const newService = req.body;
+
+        const requiredFields = [
+            'date', 'place', 'duration_service'
+        ];
+
+        const missingFields = requiredFields.filter(field => !newService[field]);
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({
+                error:`Champs manquants: ${missingFields.join(',')}`,
+            });
+        }
+
+        const serviceId  = await dbservice.createservice(newService);
+
+        res.status(201).json({
+            message: "Service créé",
+            id: serviceId,
+            data: newService
+        });
+    } catch (error) {
+        console.error("Erreur lors de la création d'un service",error)
+
+        res.status(500).json({error:"Erreur serveur"});
     }
 });
 export {serviceRouter}

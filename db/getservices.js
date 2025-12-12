@@ -50,6 +50,34 @@ const dbservice = {
         }
     },
 
+    createservice: async (service)=>{
+        let con;
+        try {
+            con= await db.connectToDatabase();
+
+            const sql = `
+                INSERT INTO service 
+                (date, place, duration_service)
+                VALUES (?, ?, ?)
+            `;
+
+            const values = [
+              service.date,
+              service.place,
+              service.duration_service
+            ]
+
+            const [result] = await con.query(sql, values);
+
+            return result.insertId;
+        } catch (error) {
+            console.error("Erreur BDD lors de la création d'un service");
+
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    }
 }
 
 export {dbservice};
