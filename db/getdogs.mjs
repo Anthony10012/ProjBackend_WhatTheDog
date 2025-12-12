@@ -9,7 +9,7 @@ const dbdogs = {
             const sqlQuery = `
                 SELECT 
                     d.iddog, d.firstname, d.sex, d.birthdate, 
-                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Croissing, 
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
                     CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
                     c.firstname as custumer_firstname, c.lastname as customer_lastname,
@@ -40,7 +40,7 @@ const dbdogs = {
             const sqlQuery = `
                 SELECT 
                     d.iddog, d.firstname, d.sex, d.birthdate, 
-                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Croissing, 
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
                     CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
                     c.firstname as custumer_firstname, c.lastname as customer_lastname,
@@ -71,7 +71,7 @@ const dbdogs = {
             const sqlQuery = `
                 SELECT 
                     d.iddog, d.firstname, d.sex, d.birthdate, 
-                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Croissing, 
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
                     CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
                     c.firstname as custumer_firstname, c.lastname as customer_lastname,
@@ -90,33 +90,34 @@ const dbdogs = {
             if (con) await db.disconnectFromDatabase(con);
         }
     },
-    createDogs: async (dogs)=>{
+
+    createdogs: async (dog)=>{
         let con;
         try {
             con= await db.connectToDatabase();
 
             const sql = `
-                INSERT INTO Dog 
-                (firstname, sex, crossing, birthdate, dead, sterilized, )
+                INSERT INTO dog 
+                (firstname, sex, crossing, birthdate, dead, sterilized, Customer_idCustomer,Race_idRace)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
             const values = [
-                customer.lastname,
-                customer.firstname,
-                customer.gender,
-                customer.email,
-                customer.tel_number,
-                customer.postal_address,
-                customer.Locality_idLocality,
-                customer.Service_idService
+                dog.firstname,
+                dog.sex,
+                dog.crossing,
+                dog.birthdate,
+                dog.dead,
+                dog.sterilized,
+                dog.Customer_idCustomer,
+                dog.Race_idRace
             ]
 
             const [result] = await con.query(sql, values);
 
             return result.insertId;
         } catch (error) {
-            console.error("Erreur BDD lors de la création d'un client");
+            console.error("Erreur BDD lors de la création d'un chien");
 
             throw error;
         } finally {
