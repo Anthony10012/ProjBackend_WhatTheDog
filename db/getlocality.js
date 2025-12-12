@@ -49,6 +49,37 @@ const dblocality = {
             if (con) await db.disconnectFromDatabase(con);
         }
     },
+
+    createLocality: async (locality)=>{
+        let con;
+        try {
+            con= await db.connectToDatabase();
+
+            const sql = `
+                INSERT INTO Locality 
+                (name, postal_code, toponym, canton_code, language_code)
+                VALUES (?, ?, ?, ?, ?)
+            `;
+
+            const values = [
+                locality.name,
+                locality.postal_code,
+                locality.toponym,
+                locality.canton_code,
+                locality.language_code
+            ]
+
+            const [result] = await con.query(sql, values);
+
+            return result.insertId;
+        } catch (error) {
+            console.error("Erreur BDD lors de la création d'un client");
+
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    }
 }
 
 export {dblocality}
