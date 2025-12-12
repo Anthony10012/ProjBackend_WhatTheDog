@@ -9,10 +9,10 @@ const dbdogs = {
             const sqlQuery = `
                 SELECT 
                     d.iddog, d.firstname, d.sex, d.birthdate, 
-                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
-                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
-                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
-                    c.firstname as custumer_firstname, c.lastname as customer_lastname,
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS crossing, 
+                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS dead,
+                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
+                    c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name 
                 FROM dog d 
                 JOIN
@@ -40,10 +40,10 @@ const dbdogs = {
             const sqlQuery = `
                 SELECT 
                     d.iddog, d.firstname, d.sex, d.birthdate, 
-                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
-                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
-                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
-                    c.firstname as custumer_firstname, c.lastname as customer_lastname,
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS crossing, 
+                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS dead,
+                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
+                    c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name 
                 FROM dog d
                 JOIN
@@ -71,10 +71,10 @@ const dbdogs = {
             const sqlQuery = `
                 SELECT 
                     d.iddog, d.firstname, d.sex, d.birthdate, 
-                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
-                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
-                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
-                    c.firstname as custumer_firstname, c.lastname as customer_lastname,
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS crossing, 
+                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS dead,
+                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
+                    c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name 
                 FROM dog d
                 JOIN
