@@ -1,6 +1,6 @@
 import express  from "express";
 
-import {dblocality} from "../db/getlocality.js"; //Import de la connexion a la bd
+import {dblocality} from "../db/getlocality.js";
 
 const localityRouter = express.Router();
 
@@ -13,6 +13,28 @@ localityRouter.get('/',async (req,res)=>{
         res.status(500).json({error:error.message})
     }
 
+});
+
+localityRouter.get('/name',async (req, res)=>{
+    try{
+        const localityName = req.query.name;
+
+        if (!localityName || localityName.trim() === ''){
+            return res.status(400).json({error:"nom invalide"});
+        }
+
+        const locality = await dblocality.getAllLocByName(localityName.trim());
+
+        if (locality.length === 0) {
+            res.status(404).json({error:"Aucune localité trouvée"});
+        } else {
+            res.status(200).json({locality});
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la recherche")
+        res.status(500).json({error:error.message})
+    }
 });
 
 const isValidId = (id) => {

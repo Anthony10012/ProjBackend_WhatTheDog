@@ -1,6 +1,9 @@
 import express from 'express';
 import {dbdogs} from '../db/getdogs.mjs';
 import {isValidID} from "../helper.mjs";
+import {dbcustomers} from "../db/getcustomers.js";
+import {customerRouter} from "./customer.js";
+
 
 const whatTheDogRouter = express.Router();
 
@@ -12,6 +15,28 @@ whatTheDogRouter.get("/", async (req, res)=>{
         const dogs = await dbdogs.getAllDogs();
         res.json(dogs);
     }catch (error){
+        res.status(500).json({error:error.message})
+    }
+});
+
+whatTheDogRouter.get('/firstname',async (req, res)=>{
+    try{
+        const dogfirstname = req.query.firstname;
+
+        if (!dogfirstname || dogfirstname.trim() === ''){
+            return res.status(400).json({error:"prénom invalide"});
+        }
+
+        const dogs = await dbdogs.getAllDogsByfirstname(dogfirstname.trim());
+
+        if (dogs.length === 0) {
+            res.status(404).json({error:"Aucun chien trouvé"});
+        } else {
+            res.status(200).json({dogs})
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la recherche")
         res.status(500).json({error:error.message})
     }
 });
@@ -41,6 +66,36 @@ whatTheDogRouter.get("/:id", async (req, res) =>{
     } catch (error){
         // Le bloc catch attrape les erreurs de la BDD (getDogsById)
         res.status(500).json({error: error.message || "Erreur serveur"});
+    }
+});
+
+whatTheDogRouter.post('/',async (req,res)=>{
+    try{
+        const newDog = req.body;
+
+        const requiredFields = [
+            'firstname', 'sex', 'crossing', 'birthdate','dead','sterilized','Customer_idCustomer','Race_idRace'
+        ];
+
+        const missingFields = requiredFields.filter(field => !newDog[field] === undefined || newDog[field] === null);
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({
+                error:`Champs manquants: ${missingFields.join(',')}`,
+            });
+        }
+
+        const dogId  = await dbdogs.createdogs(newDog);
+
+        res.status(201).json({
+            message: "Chien créé",
+            id: dogId,
+            data: newDog
+        });
+    } catch (error) {
+        console.error("Erreur lors de la création d'un chien",error)
+
+        res.status(500).json({error:"Erreur serveur"});
     }
 });
 

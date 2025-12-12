@@ -30,6 +30,25 @@ const dblocality = {
             if (con) await db.disconnectFromDatabase(con);
         }
     },
+
+    getAllLocByName: async (name) =>{
+        let con;
+        try{
+            con = await db.connectToDatabase()
+
+            const searchTerm = `%${name}%`;
+
+            // 2. On utilise l'opérateur LIKE au lieu de l'opérateur =
+            const [rows] = await con.query('SELECT * FROM locality WHERE name LIKE ?', [searchTerm]);
+
+            return rows;
+        }catch (err){
+            console.log(err);
+            throw err
+        }finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
 }
 
 export {dblocality}
