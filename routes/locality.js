@@ -1,6 +1,8 @@
 import express  from "express";
 
 import {dblocality} from "../db/getlocality.js";
+import {dbdogs} from "../db/getdogs.mjs";
+import whatTheDogRouter from "./dogs.js";
 
 const localityRouter = express.Router();
 
@@ -59,6 +61,37 @@ localityRouter.get("/:id", async (req, res) =>{
         }
     } catch (error) {
         res.status(500).json({error: error.message});
+    }
+});
+
+
+localityRouter.post('/',async (req,res)=>{
+    try{
+        const newLocality = req.body;
+
+        const requiredFields = [
+            'name', 'postal_code', 'toponym', 'canton_code','language_code'
+        ];
+
+        const missingFields = requiredFields.filter(field => !newLocality[field] === undefined || newLocality[field] === null);
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({
+                error:`Champs manquants: ${missingFields.join(',')}`,
+            });
+        }
+
+        const localityId  = await dblocality.createLocality(newLocality);
+
+        res.status(201).json({
+            message: "Localité ajouté",
+            id: localityId,
+            data: newLocality
+        });
+    } catch (error) {
+        console.error("Erreur lors de la création d'un chien",error)
+
+        res.status(500).json({error:"Erreur serveur"});
     }
 });
 
