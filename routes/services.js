@@ -67,33 +67,43 @@ serviceRouter.get('/:id',async (req,res)=>{
     }
 });
 
-serviceRouter.post('/',async (req,res)=>{
-    try{
-        const newService = req.body;
+whatTheDogRouter.put('/:id', async (req, res) => {
+    try {
+        const idDog = parseInt(req.params.id);
 
-        const requiredFields = [
-            'date', 'place', 'duration_service'
-        ];
+        // LOG ICI POUR VOIR CE QUI ARRIVE REELLEMENT
+        console.log("ID reçu:", idDog);
+        console.log("Body reçu:", req.body);
 
-        const missingFields = requiredFields.filter(field => !newService[field]);
+        const data = req.body;
 
-        if (missingFields.length > 0) {
-            return res.status(400).json({
-                error:`Champs manquants: ${missingFields.join(',')}`,
-            });
+        // On prépare l'objet pour la DB en étant tolérant sur la casse (Maj/Min)
+        const dogData = {
+            firstname: data.firstname || data.firstname,
+            sex: data.sex,
+            birthdate: data.birthdate,
+            // On gère si c'est "Oui", 1, ou "1"
+            crossing: (data.Crossing === "Oui" || data.crossing === "Oui" || data.Crossing == 1) ? 1 : 0,
+            dead: (data.Dead === "Oui" || data.dead === "Oui" || data.Dead == 1) ? 1 : 0,
+            sterilized: (data.Sterilized === "Oui" || data.sterilized === "Oui" || data.Sterilized == 1) ? 1 : 0,
+            idRace: parseInt(data.idRace || data.Race_idRace),
+            customer_firstname: data.customer_firstname,
+            customer_lastname: data.customer_lastname
+        };
+
+        console.log("Objet formaté pour SQL:", dogData);
+
+        const affectedRows = await dbdogs.updateDogs(idDog, dogData);
+
+        if (affectedRows === 0) {
+            return res.status(404).json({ error: "Aucune ligne modifiée. L'ID existe-t-il ?" });
         }
 
-        const serviceId  = await dbservice.createservice(newService);
+        res.status(200).json({ message: "ENFIN !", data: dogData });
 
-        res.status(201).json({
-            message: "Service créé",
-            id: serviceId,
-            data: newService
-        });
     } catch (error) {
-        console.error("Erreur lors de la création d'un service",error)
-
-        res.status(500).json({error:"Erreur serveur"});
+        console.error("ERREUR CRITIQUE:", error.message);
+        res.status(500).json({ error: error.message });
     }
 });
 export {serviceRouter}

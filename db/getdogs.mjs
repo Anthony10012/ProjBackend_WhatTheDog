@@ -12,7 +12,7 @@ const dbdogs = {
                     CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
                     CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
-                    c.firstname as custumer_firstname, c.lastname as customer_lastname,
+                    c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name 
                 FROM dog d 
                 JOIN
@@ -43,7 +43,7 @@ const dbdogs = {
                     CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
                     CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
-                    c.firstname as custumer_firstname, c.lastname as customer_lastname,
+                    c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name 
                 FROM dog d
                 JOIN
@@ -119,6 +119,44 @@ const dbdogs = {
         } catch (error) {
             console.error("Erreur BDD lors de la création d'un chien");
 
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
+    updateDogs: async (idDog, dogData) => {
+        let con;
+        try {
+            con = await db.connectToDatabase();
+
+            // On ne JOIN pas la table race ici car on veut modifier la référence (FK)
+            // dans la table dog, pas le contenu de la table race.
+            const sql = `
+                UPDATE dog d
+                    JOIN customer c
+                ON d.Customer_idCustomer = c.idCustomer
+                    SET
+                        d.firstname = ?, d.sex = ?, d.birthdate = ?, d.crossing = ?, d.dead = ?, d.sterilized = ?, d.Race_idRace = ?, -- On change l'ID de la race du chien ici
+                        c.firstname = ?, c.lastname = ?
+                WHERE d.iddog = ?`;
+
+            const values = [
+                dogData.firstname,
+                dogData.sex,
+                dogData.birthdate,
+                dogData.crossing,
+                dogData.dead,
+                dogData.sterilized,
+                dogData.idRace,
+                dogData.customer_firstname,
+                dogData.customer_lastname,
+                idDog
+            ];
+
+            const [result] = await con.query(sql, values);
+            return result.affectedRows;
+        } catch (error) {
+            console.error("Erreur BD lors de la mise à jour", error);
             throw error;
         } finally {
             if (con) await db.disconnectFromDatabase(con);
