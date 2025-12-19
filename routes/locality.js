@@ -97,6 +97,41 @@ localityRouter.post('/',async (req,res)=>{
         res.status(500).json({error:"Erreur serveur"});
     }
 });
+localityRouter.delete("/:id", async (req, res) => {
+    try {
+        const localityId = req.params.id;
+
+        // Vérifier que l'ID est un entier positif
+        if (!/^\d+$/.test(localityId)) {
+            return res.status(400).json({ message: "ID invalide" });
+        }
+
+        // Vérifier si la localité existe
+        const locality = await dblocality.getLocById(localityId);
+        if (!locality) {
+            return res.status(404).json({ message: "Aucune localité trouvée avec cet ID" });
+        }
+
+        // Essayer de supprimer la localité
+        try {
+            const deleted = await dblocality.deleteLocality(localityId);
+            if (!deleted) {
+                return res.status(404).json({ message: "Aucune localité trouvée avec cet ID" });
+            }
+            res.status(200).json({ message: "Localité supprimée avec succès" });
+        } catch (error) {
+            // Gestion du cas où des clients sont liés
+            if (error.message.includes("clients")) {
+                return res.status(400).json({ message: error.message });
+            }
+            throw error; // autres erreurs serveur
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la suppression de la localité :", error);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+});
 
 localityRouter.put('/:id',async (req,res)=>{
     try {

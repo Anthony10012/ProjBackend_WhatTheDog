@@ -9,9 +9,9 @@ const dbdogs = {
             const sqlQuery = `
                 SELECT 
                     d.iddog, d.firstname, d.sex, d.birthdate, 
-                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
-                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
-                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS crossing, 
+                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS dead,
+                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
                     c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name 
                 FROM dog d 
@@ -40,9 +40,9 @@ const dbdogs = {
             const sqlQuery = `
                 SELECT 
                     d.iddog, d.firstname, d.sex, d.birthdate, 
-                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS Crossing, 
-                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS Dead,
-                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS Sterilized, 
+                    CASE WHEN d.crossing = 1 THEN 'Oui' ELSE 'Non' END AS crossing, 
+                    CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS dead,
+                    CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
                     c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name 
                 FROM dog d
@@ -161,7 +161,31 @@ const dbdogs = {
         } finally {
             if (con) await db.disconnectFromDatabase(con);
         }
+    },
+
+    deleteDog: async (id) => {
+        let con;
+        try {
+            con = await db.connectToDatabase();
+
+            const sql = `DELETE FROM dog WHERE iddog = ?`;
+
+            const [result] = await con.query(sql, [id]);
+
+            // Vérifie si un chien a été supprimé
+            if (result.affectedRows === 0) {
+                return null; // Aucun chien trouvé
+            }
+
+            return true; // Suppression OK
+        } catch (error) {
+            console.error("Erreur BDD lors de la suppression d'un chien :", error);
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
     }
+
 }
 
 export {dbdogs}

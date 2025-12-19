@@ -141,5 +141,39 @@ serviceRouter.put('/:id',async (req,res)=>{
         res.status(500).json({ error: "Erreur serveur lors de la mise à jour." });
     }
 });
+serviceRouter.delete("/:id", async (req, res) => {
+    try {
+        const serviceId = req.params.id;
 
+        // Vérifier que l'ID est un entier positif
+        if (!/^\d+$/.test(serviceId)) {
+            return res.status(400).json({ message: "ID invalide" });
+        }
+
+        // Vérifier si le service existe
+        const service = await dbservice.getServicesById(serviceId);
+        if (!service) {
+            return res.status(404).json({ message: "Aucun service trouvé avec cet ID" });
+        }
+
+        // Essayer de supprimer le service
+        try {
+            const deleted = await dbservice.deleteService(serviceId);
+            if (!deleted) {
+                return res.status(404).json({ message: "Aucun service trouvé avec cet ID" });
+            }
+            res.status(200).json({ message: "Service supprimé avec succès" });
+        } catch (error) {
+            // Gestion du cas où des clients sont liés
+            if (error.message.includes("clients")) {
+                return res.status(400).json({ message: error.message });
+            }
+            throw error; // autres erreurs serveur
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la suppression du service :", error);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+});
 export {serviceRouter}

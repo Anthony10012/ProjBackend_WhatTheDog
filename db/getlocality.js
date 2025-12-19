@@ -106,7 +106,44 @@ const dblocality = {
         } finally {
             if (con) await db.disconnectFromDatabase(con);
         }
-    }
-}
+    },
 
+    deleteLocality: async (idLocality) => {
+        let con;
+        try {
+            // Vérifier que l'ID est un entier positif
+            if (!/^\d+$/.test(idLocality)) {
+                throw new Error("ID invalide");
+            }
+
+            con = await db.connectToDatabase();
+
+            // Vérifier si des clients sont liés à cette localité
+            const [customers] = await con.query(
+                "SELECT * FROM customer WHERE Locality_idLocality = ?",
+                [idLocality]
+            );
+
+            if (customers.length > 0) {
+                throw new Error("Impossible de supprimer la localité : des clients y sont encore associés");
+            }
+
+            // Supprimer la localité
+            const [result] = await con.query(
+                "DELETE FROM locality WHERE idLocality = ?",
+                [idLocality]
+            );
+
+            return result.affectedRows > 0; // true si suppression réussie
+
+        } catch (error) {
+            console.error("Erreur BDD lors de la suppression de la localité :", error.message);
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    }
+
+
+}
 export {dblocality}

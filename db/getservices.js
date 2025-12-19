@@ -102,6 +102,41 @@ const dbservice = {
         } finally {
             if (con) await db.disconnectFromDatabase(con);
         }
+    },
+    deleteService: async (idService) => {
+        let con;
+        try {
+            // Vérifier que l'ID est un entier positif
+            if (!/^\d+$/.test(idService)) {
+                throw new Error("ID invalide");
+            }
+
+            con = await db.connectToDatabase();
+
+            // Vérifier si des clients sont liés à ce service
+            const [customers] = await con.query(
+                "SELECT * FROM customer WHERE Service_idService = ?",
+                [idService]
+            );
+
+            if (customers.length > 0) {
+                throw new Error("Impossible de supprimer le service : des clients y sont encore associés");
+            }
+
+            // Supprimer le service
+            const [result] = await con.query(
+                "DELETE FROM service WHERE idService = ?",
+                [idService]
+            );
+
+            return result.affectedRows > 0; // true si suppression réussie
+
+        } catch (error) {
+            console.error("Erreur BDD lors de la suppression du service :", error.message);
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
     }
 }
 
