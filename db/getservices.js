@@ -77,6 +77,31 @@ const dbservice = {
         } finally {
             if (con) await db.disconnectFromDatabase(con);
         }
+    },
+    updateService: async (idService, serviceData) => {
+        let con;
+        try {
+            con = await db.connectToDatabase();
+
+            // On ne JOIN pas la table race ici car on veut modifier la référence (FK)
+            // dans la table dog, pas le contenu de la table race.
+            const sql = `Update service SET date = ?, place = ?, duration_service = ? WHERE idService = ?`;
+
+            const values = [
+                serviceData.date,
+                serviceData.place,
+                serviceData.duration_service,
+                idService,
+            ];
+
+            const [result] = await con.query(sql, values);
+            return result.affectedRows;
+        } catch (error) {
+            console.error("Erreur BD lors de la mise à jour", error);
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
     }
 }
 

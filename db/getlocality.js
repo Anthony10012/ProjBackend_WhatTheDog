@@ -79,6 +79,33 @@ const dblocality = {
         } finally {
             if (con) await db.disconnectFromDatabase(con);
         }
+    },
+    updateLocality: async (idLocality, localityData) => {
+        let con;
+        try {
+            con = await db.connectToDatabase();
+
+            // On ne JOIN pas la table race ici car on veut modifier la référence (FK)
+            // dans la table dog, pas le contenu de la table race.
+            const sql = `Update Locality SET name = ?, postal_code = ?, toponym = ?, canton_code = ?, language_code = ? WHERE idLocality = ?`;
+
+            const values = [
+                localityData.name,
+                localityData.postal_code,
+                localityData.toponym,
+                localityData.canton_code,
+                localityData.language_code,
+                idLocality,
+            ];
+
+            const [result] = await con.query(sql, values);
+            return result.affectedRows;
+        } catch (error) {
+            console.error("Erreur BD lors de la mise à jour", error);
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
     }
 }
 
