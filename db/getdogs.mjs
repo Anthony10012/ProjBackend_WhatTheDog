@@ -124,6 +124,44 @@ const dbdogs = {
             if (con) await db.disconnectFromDatabase(con);
         }
     },
+    updateDogs: async (idDog, dogData) => {
+        let con;
+        try {
+            con = await db.connectToDatabase();
+
+            // On ne JOIN pas la table race ici car on veut modifier la référence (FK)
+            // dans la table dog, pas le contenu de la table race.
+            const sql = `
+                UPDATE dog d
+                    JOIN customer c
+                ON d.Customer_idCustomer = c.idCustomer
+                    SET
+                        d.firstname = ?, d.sex = ?, d.birthdate = ?, d.crossing = ?, d.dead = ?, d.sterilized = ?, d.Race_idRace = ?, -- On change l'ID de la race du chien ici
+                        c.firstname = ?, c.lastname = ?
+                WHERE d.iddog = ?`;
+
+            const values = [
+                dogData.firstname,
+                dogData.sex,
+                dogData.birthdate,
+                dogData.crossing,
+                dogData.dead,
+                dogData.sterilized,
+                dogData.idRace,
+                dogData.customer_firstname,
+                dogData.customer_lastname,
+                idDog
+            ];
+
+            const [result] = await con.query(sql, values);
+            return result.affectedRows;
+        } catch (error) {
+            console.error("Erreur BD lors de la mise à jour", error);
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
 
     deleteDog: async (id) => {
         let con;

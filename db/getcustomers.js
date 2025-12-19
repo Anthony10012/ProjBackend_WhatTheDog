@@ -113,6 +113,36 @@ const dbcustomers = {
             if (con) await db.disconnectFromDatabase(con);
         }
     },
+
+    updateCustomer: async (idCustomer, customerData)=> {
+        let con;
+        try {
+            con = await db.connectToDatabase();
+
+            const sql = 'Update Customer SET lastname = ?, firstname = ?, gender = ?, email = ?, tel_number = ?, postal_address = ?, Locality_idLocality = ?, Service_idService = ? WHERE idCustomer = ?';
+
+            const values = [
+                customerData.lastname,
+                customerData.firstname,
+                customerData.gender,
+                customerData.email,
+                customerData.tel_number,
+                customerData.postal_address,
+                customerData.Locality_idLocality,
+                customerData.Service_idService,
+                idCustomer
+            ];
+
+            const [result] = await con.query(sql, values);
+
+            return result.affectedRows;
+        } catch (error) {
+            console.error("Erreur BD lors d'une mise à jour d'un client")
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
+    },
     deleteCustomer: async (idCustomer) => {
         let con;
         try {
