@@ -99,6 +99,34 @@ whatTheDogRouter.post('/',async (req,res)=>{
     }
 });
 
+
+whatTheDogRouter.delete("/:id",async (req,res)=>{
+    try{
+        const dogId  = req.params.id;
+
+        if (!isValidID(dogId)) {
+            return res.status(400).json({ message: "ID invalide" });
+        }
+
+        const deleted = await dbdogs.deleteDog(dogId)
+
+        if (!deleted){
+            return res.status(404).json({
+                message:"Aucun chien trouvé avec cet ID"
+            });
+        }
+
+
+        res.status(200).json({
+                message:"Chien supprimé avec succès"
+            }
+        )
+    }catch (error){
+        console.error("Erreur lors de la suppression du chien :", error);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+});
+
 // ... (Les autres routes POST, PUT, DELETE pour les activités restent telles quelles,
 // mais devraient être renommées pour les chiens si l'objectif est un CRUD complet pour les chiens).
 

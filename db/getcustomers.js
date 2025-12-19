@@ -112,6 +112,42 @@ const dbcustomers = {
         } finally {
             if (con) await db.disconnectFromDatabase(con);
         }
+    },
+    deleteCustomer: async (idCustomer) => {
+        let con;
+        try {
+            // Vérification que l'ID est un entier positif
+            if (!/^\d+$/.test(idCustomer)) {
+                throw new Error("ID invalide");
+            }
+
+            con = await db.connectToDatabase();
+
+            // Vérifier si des chiens sont liés au client
+            const [dogs] = await con.query(
+                "SELECT * FROM dog WHERE Customer_idCustomer = ?",
+                [idCustomer]
+            );
+
+            if (dogs.length > 0) {
+                throw new Error("Impossible de supprimer le client : il a encore des chiens associés");
+            }
+
+            // Supprimer le client
+            const [result] = await con.query(
+                "DELETE FROM customer WHERE idCustomer = ?",
+                [idCustomer]
+            );
+
+            return result.affectedRows > 0; // true si suppression réussie
+
+        } catch (error) {
+            console.error("Erreur BDD lors de la suppression du client :", error.message);
+            throw error;
+        } finally {
+            if (con) await db.disconnectFromDatabase(con);
+        }
     }
+
 }
 export  {dbcustomers}
