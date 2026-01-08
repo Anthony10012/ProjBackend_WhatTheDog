@@ -1,8 +1,8 @@
 import express from 'express';
 import {dbdogs} from '../db/getdogs.mjs';
 import {isValidID} from "../helper.mjs";
-import {dbcustomers} from "../db/getcustomers.js";
-import {customerRouter} from "./customer.js";
+
+
 
 
 const whatTheDogRouter = express.Router();
@@ -96,6 +96,74 @@ whatTheDogRouter.post('/',async (req,res)=>{
         console.error("Erreur lors de la création d'un chien",error)
 
         res.status(500).json({error:"Erreur serveur"});
+    }
+});
+
+
+whatTheDogRouter.put('/:id', async (req, res) => {
+    try {
+        const idDog = parseInt(req.params.id);
+        const rawData = req.body;
+
+        if (isNaN(idDog)) return res.status(400).json({ error: "ID invalide" });
+
+        // Normalisation des données : Conversion Oui/Non -> 1/0
+        // Et s'assurer qu'on utilise les bons noms de champs (minuscules)
+        const dogData = {
+            firstname: rawData.firstname,
+            sex: rawData.sex,
+            birthdate: rawData.birthdate,
+            crossing: rawData.Crossing === "Oui" ? 1 : 0,
+            dead: rawData.Dead === "Oui" ? 1 : 0,
+            sterilized: (rawData.Sterilized === "Oui" || rawData.Sterilized === "oui") ? 1 : 0,
+            customer_firstname: rawData.customer_firstname,
+            customer_lastname: rawData.customer_lastname,
+            idRace: rawData.idRace
+        };
+
+        // Validation simple
+        if (!dogData.idRace) {
+            return res.status(400).json({ error: "L'ID de la race (idRace) est obligatoire pour changer la race." });
+        }
+
+        const affectedRows = await dbdogs.updateDogs(idDog, dogData);
+
+        if (affectedRows === 0) {
+            res.status(404).json({ error: "Chien non trouvé" });
+        } else {
+            res.status(200).json({ message: "Mis à jour !", data: dogData });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+});
+
+whatTheDogRouter.delete("/:id",async (req,res)=>{
+    try{
+        const dogId  = req.params.id;
+
+        if (!isValidID(dogId)) {
+            return res.status(400).json({ message: "ID invalide" });
+        }
+
+        const deleted = await dbdogs.deleteDog(dogId)
+
+        if (!deleted){
+            return res.status(404).json({
+                message:"Aucun chien trouvé avec cet ID"
+            });
+        }
+
+
+        res.status(200).json({
+                message:"Chien supprimé avec succès"
+            }
+        )
+    }catch (error){
+        console.error("Erreur lors de la suppression du chien :", error);
+        res.status(500).json({ message: "Erreur serveur" });
     }
 });
 

@@ -3,6 +3,9 @@ import express  from "express";
 import {dblocality} from "../db/getlocality.js";
 import {dbdogs} from "../db/getdogs.mjs";
 import whatTheDogRouter from "./dogs.js";
+import {isValidID} from "../helper.mjs";
+import {dbcustomers} from "../db/getcustomers.js";
+import {customerRouter} from "./customer.js";
 
 const localityRouter = express.Router();
 
@@ -92,6 +95,86 @@ localityRouter.post('/',async (req,res)=>{
         console.error("Erreur lors de la création d'un chien",error)
 
         res.status(500).json({error:"Erreur serveur"});
+    }
+});
+localityRouter.delete("/:id", async (req, res) => {
+    try {
+        const localityId = req.params.id;
+
+        // Vérifier que l'ID est un entier positif
+        if (!/^\d+$/.test(localityId)) {
+            return res.status(400).json({ message: "ID invalide" });
+        }
+
+        // Vérifier si la localité existe
+        const locality = await dblocality.getLocById(localityId);
+        if (!locality) {
+            return res.status(404).json({ message: "Aucune localité trouvée avec cet ID" });
+        }
+
+        // Essayer de supprimer la localité
+        try {
+            const deleted = await dblocality.deleteLocality(localityId);
+            if (!deleted) {
+                return res.status(404).json({ message: "Aucune localité trouvée avec cet ID" });
+            }
+            res.status(200).json({ message: "Localité supprimée avec succès" });
+        } catch (error) {
+            // Gestion du cas où des clients sont liés
+            if (error.message.includes("clients")) {
+                return res.status(400).json({ message: error.message });
+            }
+            throw error; // autres erreurs serveur
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la suppression de la localité :", error);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+});
+
+localityRouter.put('/:id',async (req,res)=>{
+    try {
+        const idLocality = parseInt(req.params.id);
+        const localityData = req.body;
+
+        // 1. Validation de l'ID dans l'URL
+        if (!isValidID(idLocality)) {
+            return res.status(400).json({ error: "ID de la localité invalide dans l'URL" });
+        }
+
+        // 2. Validation des champs requis dans le corps de la requête
+        const requiredFields = [
+            'name', 'postal_code', 'toponym', 'canton_code', 'language_code',
+        ];
+
+        const missingFields = requiredFields.filter(field => localityData[field] === undefined);
+
+        if (missingFields.length > 0) {
+            // J'ajoute 'gender' et 'tel_number' car pour un PUT, on s'attend à ce que toutes les données
+            // du client soient fournies pour la mise à jour complète (contrairement au PATCH)
+            return res.status(400).json({
+                error: `Champs manquants ou incomplets pour la mise à jour : ${missingFields.join(', ')}`,
+            });
+        }
+
+        // 3. Appel de la fonction de la BDD pour la mise à jour
+        const affectedRows = await dblocality.updateLocality(idLocality, localityData);
+
+        if (affectedRows === 0) {
+            // Si 0 lignes affectées, cela signifie que l'ID n'a pas été trouvé
+            res.status(404).json({ error: `Client avec l'ID ${idLocality} introuvable.` });
+        } else {
+            // Succès
+            res.status(200).json({
+                message: `La localité ${idLocality} mis à jour avec succès.`,
+                data: localityData
+            });
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour d'une localité:", error);
+        res.status(500).json({ error: "Erreur serveur lors de la mise à jour." });
     }
 });
 

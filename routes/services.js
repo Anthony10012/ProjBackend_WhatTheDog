@@ -96,4 +96,84 @@ serviceRouter.post('/',async (req,res)=>{
         res.status(500).json({error:"Erreur serveur"});
     }
 });
+
+serviceRouter.put('/:id',async (req,res)=>{
+    try {
+        const idService = parseInt(req.params.id);
+        const serviceData = req.body;
+
+        // 1. Validation de l'ID dans l'URL
+        if (!isValidID(idService)) {
+            return res.status(400).json({ error: "ID d'un service invalide dans l'URL" });
+        }
+
+        // 2. Validation des champs requis dans le corps de la requête
+        const requiredFields = [
+            'date', 'place', 'duration_service',
+        ];
+
+        const missingFields = requiredFields.filter(field => serviceData[field] === undefined);
+
+        if (missingFields.length > 0) {
+            // J'ajoute 'gender' et 'tel_number' car pour un PUT, on s'attend à ce que toutes les données
+            // du client soient fournies pour la mise à jour complète (contrairement au PATCH)
+            return res.status(400).json({
+                error: `Champs manquants ou incomplets pour la mise à jour : ${missingFields.join(', ')}`,
+            });
+        }
+
+        // 3. Appel de la fonction de la BDD pour la mise à jour
+        const affectedRows = await dbservice.updateService(idService, serviceData);
+
+        if (affectedRows === 0) {
+            // Si 0 lignes affectées, cela signifie que l'ID n'a pas été trouvé
+            res.status(404).json({ error: `Service avec l'ID ${idService} introuvable.` });
+        } else {
+            // Succès
+            res.status(200).json({
+                message: `Le service ${idService} mis à jour avec succès.`,
+                data: serviceData
+            });
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour d'un service:", error);
+        res.status(500).json({ error: "Erreur serveur lors de la mise à jour." });
+    }
+});
+serviceRouter.delete("/:id", async (req, res) => {
+    try {
+        const serviceId = req.params.id;
+
+        // Vérifier que l'ID est un entier positif
+        if (!/^\d+$/.test(serviceId)) {
+            return res.status(400).json({ message: "ID invalide" });
+        }
+
+        // Vérifier si le service existe
+        const service = await dbservice.getServicesById(serviceId);
+        if (!service) {
+            return res.status(404).json({ message: "Aucun service trouvé avec cet ID" });
+        }
+
+        // Essayer de supprimer le service
+        try {
+            const deleted = await dbservice.deleteService(serviceId);
+            if (!deleted) {
+                return res.status(404).json({ message: "Aucun service trouvé avec cet ID" });
+            }
+            res.status(200).json({ message: "Service supprimé avec succès" });
+        } catch (error) {
+            // Gestion du cas où des clients sont liés
+            if (error.message.includes("clients")) {
+                return res.status(400).json({ message: error.message });
+            }
+            throw error; // autres erreurs serveur
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la suppression du service :", error);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+});
 export {serviceRouter}

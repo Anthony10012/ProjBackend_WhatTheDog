@@ -138,4 +138,40 @@ customerRouter.put('/:id',async (req,res)=>{
     }
 });
 
+customerRouter.delete("/:id", async (req, res) => {
+    try {
+        const customerId = req.params.id;
+
+        // Vérifier que l'ID est un entier positif
+        if (!/^\d+$/.test(customerId)) {
+            return res.status(400).json({ message: "ID invalide" });
+        }
+
+        // Vérifier si le client existe
+        const customer = await dbcustomers.getAllCustomersById(customerId);
+        if (!customer) {
+            return res.status(404).json({ message: "Aucun client trouvé avec cet ID" });
+        }
+
+        // Essayer de supprimer le client
+        try {
+            const deleted = await dbcustomers.deleteCustomer(customerId);
+            if (!deleted) {
+                return res.status(404).json({ message: "Aucun client trouvé avec cet ID" });
+            }
+            res.status(200).json({ message: "Client supprimé avec succès" });
+        } catch (error) {
+            // Gestion du cas où le client a des chiens
+            if (error.message.includes("chiens associés")) {
+                return res.status(400).json({ message: error.message });
+            }
+            throw error; // autres erreurs serveur
+        }
+
+    } catch (error) {
+        console.error("Erreur lors de la suppression du client :", error);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+});
+
 export {customerRouter}
