@@ -15,9 +15,9 @@ const dbdogs = {
                     c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name 
                 FROM dog d 
-                JOIN
-                    customer c ON d.Customer_idCustomer = c.idCustomer
-                JOIN race r ON d.Race_idRace = r.idRace`;
+                JOIN customer c ON d.Customer_idCustomer = c.idCustomer
+                JOIN race r ON d.Race_idRace = r.idRace
+                ORDER BY d.iddog`;
 
             const [rows] = await con.query(sqlQuery);
 
