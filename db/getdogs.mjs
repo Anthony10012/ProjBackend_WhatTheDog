@@ -14,7 +14,7 @@ const dbdogs = {
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
                     c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name,
-                    m.name as illness_name
+                    IFNULL (m.name, 'Aucune maladie') as illness_name
                 FROM dog d 
                 JOIN customer c ON d.Customer_idCustomer = c.idCustomer
                 JOIN race r ON d.Race_idRace = r.idRace
@@ -48,7 +48,7 @@ const dbdogs = {
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
                     c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name,
-                    m.name as illness_name
+                    IFNULL (m.name, 'Aucune maladie') as illness_name
                 FROM dog d
                 JOIN
                     customer c ON d.Customer_idCustomer = c.idCustomer
@@ -82,7 +82,7 @@ const dbdogs = {
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
                     c.firstname as customer_firstname, c.lastname as customer_lastname,
                     r.name as race_name,
-                    m.name as illness_name
+                    IFNULL (m.name, 'Aucune maladie') as illness_name
                 FROM dog d
                 JOIN
                     customer c ON d.Customer_idCustomer = c.idCustomer
