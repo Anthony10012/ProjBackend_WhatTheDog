@@ -3,10 +3,19 @@ import { dbrace } from "../db/dbrace.mjs";
 
 const raceRouter = Router();
 
-// GET toutes les races
+// GET toutes les races et recherche par nom
 raceRouter.get("/", async (req, res) => {
     try {
-        res.json(await dbrace.getAllRaces());
+        const {name} = req.query;
+
+        // Si un nom est fourni -> recherche
+        if (name){
+            const races = await dbrace.getRacesByName(name);
+            return res.json(races);
+        }
+        // Sinon toutes les races
+        const races = await dbrace.getAllRaces();
+        res.json(races);
     } catch {
         res.status(500).json({ message: "Erreur serveur" });
     }
