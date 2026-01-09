@@ -1,6 +1,6 @@
 # WhatTheDog API
 
-This is the official documentation for the WhatTheDog API, a backend project for managing customers, dogs, localities, and services.
+This is the official documentation for the WhatTheDog API, a backend project for managing customers, dogs, localities, races, and services.
 
 ## Project Description
 
@@ -9,6 +9,7 @@ The WhatTheDog API provides a set of endpoints to interact with a database for a
 *   **Customers**: Manage customer information.
 *   **Dogs**: Manage information about dogs, including their relationship with customers.
 *   **Localities**: Manage locality data.
+*   **Races**: Manage dog breed information.
 *   **Services**: Manage the services offered.
 
 The application is built with Node.js, Express, and uses a MySQL2 driver to connect to a MySQL database.
@@ -69,11 +70,12 @@ The base URL for all endpoints is `/api`.
           "Service_idService": "integer"
         }
         ```
+*   `DELETE /customers/:id`: Delete a customer.
 
 ### Dogs
 
 *   `GET /dogs`: Get all dogs.
-*   `GET /dogs/firstname?firstname=<name>`: Get dogs by firstname.
+*   `GET /dogs/firstname?firstname=<name>`: Get dogs by first name.
 *   `GET /dogs/:id`: Get a dog by ID.
 *   `POST /dogs`: Create a new dog.
     *   **Body (JSON)**:
@@ -104,6 +106,7 @@ The base URL for all endpoints is `/api`.
             "idRace": "integer"
         }
         ```
+*   `DELETE /dogs/:id`: Delete a dog.
 
 ### Locality
 
@@ -121,9 +124,48 @@ The base URL for all endpoints is `/api`.
             "language_code": "string"
         }
         ```
+*   `PUT /locality/:id`: Update a locality.
+*   `DELETE /locality/:id`: Delete a locality.
+
+### Races
+
+*   `GET /races`: Get all races.
+*   `GET /races?name=<name>`: Get races by name.
+*   `GET /races/:id`: Get a race by ID.
+*   `POST /races`: Create a new race.
+    *   **Body (JSON)**:
+        ```json
+        {
+            "name": "string",
+            "category": "string",
+            "morphotype": "string",
+            "classification": "string",
+            "sizeMin_F": "decimal",
+            "sizeMax_F": "decimal",
+            "sizeMin_M": "decimal",
+            "sizeMax_M": "decimal",
+            "weightMin_F": "decimal",
+            "weightMax_F": "decimal",
+            "weightMin_M": "decimal",
+            "weightMax_M": "decimal",
+            "life_expectancy": "string"
+        }
+        ```
+*   `DELETE /races/:id`: Delete a race.
 
 ### Services
 
 *   `GET /service`: Get all services.
 *   `GET /service/place?place=<place>`: Get services by place.
 *   `GET /service/:id`: Get a service by ID.
+*   `POST /service`: Create a new service.
+     *   **Body (JSON)**:
+        ```json
+        {
+          "date": "date",
+          "place": "string",
+          "duration_service": "string"
+        }
+        ```
+*   `PUT /service/:id`: Update a service.
+*   `DELETE /service/:id`: Delete a service.
