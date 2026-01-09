@@ -13,10 +13,13 @@ const dbdogs = {
                     CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS dead,
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
                     c.firstname as customer_firstname, c.lastname as customer_lastname,
-                    r.name as race_name 
+                    r.name as race_name,
+                    m.name as illness_name
                 FROM dog d 
                 JOIN customer c ON d.Customer_idCustomer = c.idCustomer
                 JOIN race r ON d.Race_idRace = r.idRace
+                LEFT JOIN dog_has_illness di on d.iddog = di.dog_iddog
+                LEFT JOIN illness m ON di.Illness_idillness = m.idillness
                 ORDER BY d.iddog`;
 
             const [rows] = await con.query(sqlQuery);
@@ -44,11 +47,14 @@ const dbdogs = {
                     CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS dead,
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
                     c.firstname as customer_firstname, c.lastname as customer_lastname,
-                    r.name as race_name 
+                    r.name as race_name,
+                    m.name as illness_name
                 FROM dog d
                 JOIN
                     customer c ON d.Customer_idCustomer = c.idCustomer
                 JOIN race r ON d.Race_idRace = r.idRace
+                LEFT JOIN dog_has_illness di on d.iddog = di.dog_iddog
+                LEFT JOIN illness m ON di.Illness_idillness = m.idillness
                 WHERE d.iddog = ?`;
 
             const [rows] = await con.query(sqlQuery, [id]);
@@ -75,11 +81,14 @@ const dbdogs = {
                     CASE WHEN d.dead = 1 THEN 'Oui' ELSE 'Non' END AS dead,
                     CASE WHEN d.sterilized = 1 THEN 'Oui' ELSE 'Non' END AS sterilized, 
                     c.firstname as customer_firstname, c.lastname as customer_lastname,
-                    r.name as race_name 
+                    r.name as race_name,
+                    m.name as illness_name
                 FROM dog d
                 JOIN
                     customer c ON d.Customer_idCustomer = c.idCustomer
                 JOIN race r ON d.Race_idRace = r.idRace
+                LEFT JOIN dog_has_illness di on d.iddog = di.dog_iddog
+                LEFT JOIN illness m ON di.Illness_idillness = m.idillness
                 WHERE d.firstname LIKE ?`
             const [rows] = await con.query(sqlQuery, [searchTerm]);
             return rows;

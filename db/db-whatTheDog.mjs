@@ -11,7 +11,7 @@ const db = {
         const con = await mysql.createConnection({
             host: 'localhost',
             user: 'root',
-            password: 'root',
+            password: '',
             database: 'what_the_dog',
         });
         return con;
