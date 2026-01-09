@@ -15,7 +15,8 @@ const dbcustomers = {
                 FROM customer c 
                 JOIN
                     locality l ON c.Locality_idLocality = l.idLocality
-                JOIN service s ON c.Service_idService = s.idService`;
+                JOIN service s ON c.Service_idService = s.idService
+                ORDER BY c.idCustomer`;
 
             const [rows] = await con.query(sqlQuery);
 
